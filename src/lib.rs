@@ -1,6 +1,8 @@
 use std::error::Error;
 use std::env;
 
+mod engine;
+
 pub struct Config{
     pub stack: i32
 }
@@ -26,6 +28,10 @@ impl Config {
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     
+
+    let mut board = engine::Board::new(&config.stack);
     println!("Hanoi tower with {} stacks", config.stack);
+    println!("{}", board);
+
     Ok(())
 }
