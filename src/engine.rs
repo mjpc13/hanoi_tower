@@ -11,17 +11,11 @@ impl Disk{
     pub fn new(number: i32, num_disks: &i32) -> Disk {
         let mut string = String::new();
 
-        for n in 0..(num_disks+1-number){
-            string.push(' ');
-        }
+        for _ in 0..(num_disks+1-number){string.push(' ');}
 
-        for n in 0..number{
-            string.push('-');
-        }
+        for _ in 0..number{string.push('-');}
 
-        for n in 0..(num_disks-number){
-            string.push(' ');
-        }
+        for _ in 0..(num_disks-number){string.push(' ');}
 
         Disk{number, string}
     }

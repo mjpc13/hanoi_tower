@@ -17,12 +17,11 @@ impl Config {
         };
 
         let stacks = arg.parse();
-        let stacks = match stacks {
+        match stacks {
             Ok(stack) => Ok(Config{stack}),
             Err(error) => Err("Error parsing the input"),
-        };
-
-        stacks
+        }
+        
     }
 }
 
