@@ -30,6 +30,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     
 
     let mut board = engine::Board::new(&config.stack);
+    board.update_string();
     println!("Hanoi tower with {} stacks", config.stack);
     println!("{}", board);
 

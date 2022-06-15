@@ -6,11 +6,21 @@ pub struct Disk{
     pub number: i32,
     pub string: String,
 }
+
 impl Disk{
-    pub fn new(number: i32) -> Disk {
+    pub fn new(number: i32, num_disks: &i32) -> Disk {
         let mut string = String::new();
+
+        for n in 0..(num_disks+1-number){
+            string.push(' ');
+        }
+
         for n in 0..number{
             string.push('-');
+        }
+
+        for n in 0..(num_disks-number){
+            string.push(' ');
         }
 
         Disk{number, string}
@@ -29,12 +39,14 @@ impl Stack {
 
         if fill{
             for number in 1..n_disks+1{
-                disks.push(Disk::new(number));
+                disks.push(Disk::new(number, n_disks));
             }
         }
 
         Stack{disks, fill}
     }
+
+    pub fn count_disks(&self) -> i32 { self.disks.len().try_into().unwrap() }
 
     pub fn move_disk(&self, other_stack: Stack) -> Result<(), &'static str>{
        if self.disks.last().unwrap().number <= other_stack.disks.last().unwrap().number{
@@ -43,7 +55,6 @@ impl Stack {
        else{
            return Ok(());
        }
-
     }
 }
 
@@ -51,6 +62,8 @@ pub struct Board{
     pub stacks: [Stack; 3],
     height: i32,
     width: i32,
+    n_disks: i32,
+    string: String,
 }
 
 impl Board{
@@ -65,13 +78,43 @@ impl Board{
         let height: i32 = n_disks+3;
         let width: i32 = ((n_disks*2+1)+2)*3;
 
-        Board{stacks,height, width} 
+        let mut string: String = String::new();
+
+        Board{stacks,n_disks: *n_disks, height, width, string} 
     }
+
+    fn draw_empty(&self) -> String {
+        
+        let mut tmp = String::new();
+        for _ in 0..self.n_disks { tmp.push(' '); }
+        tmp.push('|');
+        for _ in 0..self.n_disks { tmp.push(' '); }
+
+        tmp
+    }
+
+    pub fn update_string(&mut self){
+
+        //Draw the first line (always empty)
+        let mut tmp = String::new();
+
+        for _ in 0..3 {
+            tmp.push_str(
+                &self.draw_empty()
+            );
+        }
+        tmp.push('\n');
+
+        //TODO:  draw the stacks
+
+        for _ in 0..self.width { tmp.push('#'); }
+        self.string = tmp;
+    }
+
 }
 
 impl fmt::Display for Board {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut string: String = String::new();
-        write!(f, "{}", string)
+        write!(f, "{}", self.string)
     }
 }
