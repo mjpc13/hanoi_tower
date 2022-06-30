@@ -65,7 +65,7 @@ impl Board{
     pub fn new(n_disks: &i32) -> Board {
         
         let mut s1 = Stack::new(n_disks, true);
-        let mut s2 = Stack::new(n_disks, true);
+        let mut s2 = Stack::new(n_disks, false);
         let mut s3 = Stack::new(n_disks, false);
         let mut stacks = [s1,s2,s3];
 
