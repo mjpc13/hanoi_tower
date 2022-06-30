@@ -11,11 +11,11 @@ impl Disk{
     pub fn new(number: i32, num_disks: &i32) -> Disk {
         let mut string = String::new();
 
-        for _ in 0..(num_disks+1-number){string.push(' ');}
+        for _ in 0..(num_disks-(number-1)/2){string.push(' ');}
 
-        for _ in 0..number{string.push('-');}
+        for _ in 0..number{string.push('+');}
 
-        for _ in 0..(num_disks-number){string.push(' ');}
+        for _ in 0..(num_disks-(number-1)/2){string.push(' ');}
 
         Disk{number, string}
     }
@@ -32,8 +32,8 @@ impl Stack {
         let mut disks: Vec<Disk> = Vec::new();
 
         if fill{
-            for number in 1..n_disks+1{
-                disks.push(Disk::new(number, n_disks));
+            for n in 0..*n_disks{
+                disks.push(Disk::new(2*n+1, n_disks));
             }
         }
 
@@ -70,7 +70,7 @@ impl Board{
         let mut stacks = [s1,s2,s3];
 
         let height: i32 = n_disks+3;
-        let width: i32 = ((n_disks*2+1)+2)*3;
+        let width: i32 = ((n_disks*2+1))*3;
 
         let mut string: String = String::new();
 
@@ -100,6 +100,17 @@ impl Board{
         tmp.push('\n');
 
         //TODO:  draw the stacks
+        for i in 0..(self.n_disks){
+            for j in 0..3{
+                if self.stacks[j].count_disks() < (i-self.n_disks).abs(){
+                    tmp.push_str(&self.draw_empty());
+                }
+                else{
+                    tmp.push_str(&self.stacks[j].disks[i as usize].string);
+                }
+            }
+            tmp.push('\n');
+        }
 
         for _ in 0..self.width { tmp.push('#'); }
         self.string = tmp;
