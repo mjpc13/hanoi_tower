@@ -1,5 +1,6 @@
 use std::error::Error;
 use std::env;
+use std::io::Write;
 
 mod engine;
 
@@ -25,13 +26,35 @@ impl Config {
     }
 }
 
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    
+fn prompt() -> String{
+    let mut line = String::new();
+    std::io::stdout().flush().unwrap();
+    std::io::stdin().read_line(&mut line).expect("Error: Could not read a line");
+ 
+    return line.trim().to_string()
+}
+
+fn play(config: &Config) -> Result<(), Box<dyn Error>> {
 
     let mut board = engine::Board::new(&config.stack);
     board.update_string();
-    println!("Hanoi tower with {} stacks", config.stack);
+    //println!("Hanoi tower with {} stacks", config.stack);
     println!("{}", board);
 
     Ok(())
+}
+
+pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    
+    let menu = String::from("--- MAIN MENU ---: \n(A) Play the game\n(B) Exit\n> ");
+    loop {
+        print!("{}", menu);
+
+        match prompt().as_str() {
+           "A" => play(&config),
+           "B" | "exit" => break Ok(()),
+           _ => todo!(),
+        };
+    }
+
 }
